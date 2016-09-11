@@ -1,0 +1,31 @@
+% REQUIRES
+% \usepackage{fancyhdr} % headers/footers management (overrides empty, plain and headings)
+
+% THE ORDER IS REALLY IMPORTANT, OTHERWISE IT WILL BREAK THINGS
+
+% 1.
+% Redefines the existing 'plain' style, (because 'chapter' and \tableofcontents ignores the page style currently in effect for their first page)
+\fancypagestyle{plain}{
+    % Took from: http://anorien.csc.warwick.ac.uk/mirrors/CTAN/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+    \fancyhead[LO,RE]{\slshape \leftmark}
+    \fancyhead[LE,RO]{\slshape \rightmark}
+
+    % Footers
+    \renewcommand{\footrulewidth}{0.4pt}
+    \fancyfoot[C]{The Smiths -- TN09 -- Romain \textsc{Pellerin}}
+    \fancyfoot[LE,RO]{\ifdefined\thepage \thepage \fi} % to be used with \pagenumbering{gobble} % no numerotation
+    % \fancyfoot[LE,RO]{\ifnum\thepage>0 \thepage \fi} % to be used with %\addtocounter{page}{-4} % numerotation begins at 1 + (-4)
+}
+
+% 2.
+\pagestyle{plain}
+
+% 3.
+% http://tex.stackexchange.com/questions/111223/markboth-is-not-working-when-using-chapter-and-section
+% Took from : http://ftp.snt.utwente.nl/pub/software/tex/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+\renewcommand{\chaptermark}[1]{\markboth{}{\MakeUppercase{\thechapter.\ #1}}}
+\renewcommand{\sectionmark}[1]{}
+
+% NORMALLY
+% \renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+% \renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}

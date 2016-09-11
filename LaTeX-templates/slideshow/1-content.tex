@@ -1,0 +1,150 @@
+\section{Section}
+
+\begin{frame}[plain]
+  \centering {\Huge Section title}
+\end{frame}
+
+\subsection{Subsection}
+\begin{frame}%[label=(label name)]
+  %\frametitle{Section title}
+  %\framesubtitle{Subtitle}
+  Text
+
+  \bigskip
+  
+  \begin{quotation}
+  Quote
+  \end{quotation}
+\end{frame}
+
+\begin{frame}
+  \alert{Some text}
+  \begin{itemize}
+    \item<2->\sout<3->{Text}\footnote<2->{\footnotesize Text}
+    \item<3->\sout<4->{Text}
+    \item<4->\sout<5->{Text}
+    \item<5->\textit{Text}
+  \end{itemize}
+\end{frame}
+
+\subsection{Sub}
+\begin{frame}
+  \begin{figure}[htp]
+    \centering
+    \subfloat{\label{fig:logo}\includegraphics[width=0.3\textwidth]{logo1.jpg}}
+    \hspace{5pt}
+    \pause
+    \subfloat{\includegraphics[width=0.3\textwidth]{logo2.jpg}}
+  \end{figure}
+  \centering \footnotesize\textcolor{blue}{\url{http://www.somewebsite.??}}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{logo1.jpg}\\
+    \bigskip
+    \pause
+    \includegraphics[width=0.6\textwidth]{logo2.jpg}\\
+    \smallskip
+    \textcolor{gray}{\tiny Credit: url}
+  \end{center}
+\end{frame}
+
+\subsection{Sub}
+\begin{frame}
+  \pause[2]{%
+      \begin{block}{Text}
+        \begin{itemize}
+          \item<3->Text
+          \item<4->Text
+          \item<5->Text
+          \item<6->Text
+        \end{itemize}
+      \end{block}
+  }
+  \pause[7]
+  \centering \includegraphics[width=0.7\textwidth]{logo1.jpg}
+\end{frame}
+
+\begin{frame}
+  \pause[2]{%
+      \begin{block}{Block}
+        \begin{itemize}
+          \item<3->Item
+          \item<4->Item
+        \end{itemize}
+      \end{block}
+  }
+  \begin{center}
+      \pause[5]
+      {\transparent{0.4}\includegraphics[width=0.2\textwidth]{logo1.jpg}}
+      \pause[6]
+      {\transparent{0.4}\includegraphics[width=0.2\textwidth]{logo1.jpg}}
+      \pause[7]
+      {\transparent{0.4}\includegraphics[width=0.2\textwidth]{logo1.jpg}}
+      \pause[8]
+      \includegraphics[width=0.2\textwidth]{logo1.jpg}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+    \pause\alert{Text}
+
+    \vspace{0.6cm}
+
+    \begin{itemize}
+      \item<3-> Text: \textbf{text}
+      \item<4-> Text: \textbf{text}
+    \end{itemize}
+
+    \vspace{0.6cm}
+
+    \pause[5]
+    \begin{columns}[c]
+        \begin{column}{3cm}
+          $\bullet$ Something
+        \end{column}
+
+        \begin{column}{3cm}
+          $\bullet$ Something
+        \end{column}
+    \end{columns}
+
+    \vspace{0.6cm}
+
+    \pause[6]
+    $\hookrightarrow$ \textit{Text} ...
+\end{frame}
+
+\begin{frame}[t,fragile] % text on top (t)
+  \textbf{Text}
+
+  \vfill
+  {%
+    \begin{itemize}
+      \item<2-> Text
+      \item<3-> Text
+      \item<4-> Text\footnote<5->{\textit{...}} text
+    \end{itemize}
+
+    \medskip
+    \java
+    \pause[5]{\tiny{%
+      \begin{lstlisting}
+code
+      \end{lstlisting}
+    }}
+  }
+  \vfill
+\end{frame}
+
+\begin{frame}[t]
+  \textbf{Text}
+
+  \vfill
+  {%
+    \begin{center}
+      \includegraphics[width=0.8\textwidth]{logo1.jpg}
+    \end{center}
+  }
+\end{frame}

@@ -1,0 +1,366 @@
+\chapter[Designing an API]{Designing a robust REST API}\label{chap:api}
+
+Most of the time, the only purpose of an API is to give clients (a mobile application, a software program, a web browser, etc) access to a remote database (thus a server), in order for them to store data (or make complex calculations sometimes). The scheme is very simple: the server waits for incoming requests and responds accordingly. On the other hand, clients occasionally send requests, either to perform an action (saving, updating or deleting data), or to retrieve data.
+
+\medskip
+
+When it comes to designing and implementing (REST) APIs, I had always been seeking a standard to follow\footnote{Some people are trying to create a standard, see \href{http://jsonapi.org/}{http://jsonapi.org/}} or some best practices to apply. After doing loads of research, my colleagues and I finally came up with a scheme working pretty well.
+
+\medskip
+
+This part of the report assumes the reader has some knowledge of the HTTP protocol. It goes without saying that one must use HTTPS when dealing with APIs to ensure privacy. This way, everything will be encrypted and anyone sniffing the network will not be able to see the content of requests or responses.
+
+\medskip
+
+Before explaining what it is, let me first describe the process we went though, from understanding what is underlying (the very basic concept of HTTP) to the final API we wanted to build.
+
+\section{REST}
+
+In "REST API", "REST" stands for "\textit{Representational State Transfer}", which is the software architectural style of the web. Basically, this means that any REST API relies on the HTTP protocol (and by extension HTTPS). As a consequence, the first step I went through was to understand all the strengths and weaknesses of HTTP in order to use everything it has to offer. I will only be referring to HTTP version 1.1 in the coming lines, since version 2 is still hardly used overall, and quite badly supported.
+
+\section{It is all about resources}
+
+URLs\footnote{Uniform Resource Locator} represent resources. When designing an API, I had been thinking about it as resource containers. Every end-point should represent either a resource or a list of resources. Following this, \textbf{there must be two-end points per resource, the resource collection, and an individual resource within the collection}:
+
+\begin{lstlisting}
+/users
+/users/{id}
+\end{lstlisting}
+
+The important thing here, is to understand that \lstinline|{id}| is a resource's unique identifier. For users, we retrieved these unique identifiers thanks to the \lstinline{/users} end-point (which had given us the list of users). So, \lstinline|/users/{id}| will give us all the details about \textbf{one resource}, the targeted user. The same rule applies for any other collection of resources.
+
+\medskip
+
+Moreover, resources can be imbricated, creating some kind of hierarchy, with an idea of "resources contained in a bigger set of resources", like in the following example, where messages belong to specific users:
+
+\begin{lstlisting}
+/users/{userId}/messages
+/users/{userId}/messages/{messageId}
+\end{lstlisting}
+
+\section{Methods (also called verbs)}
+
+One of the biggest strengths of HTTP is its verbs. The most popular are \lstinline{GET} and \lstinline{POST}. The latter is mostly used for asynchronous calls (AJAX) or forms in web pages, whereas the former is used every time a page is accessed or reloaded from a browser.
+
+\medskip
+
+For APIs, we mostly use PUT, GET, POST and DELETE. For example, this is how to create, get, update and delete a specific user:
+
+\fakeshell
+\begin{lstlisting}
+POST   /users      # Create
+PUT    /users/{id} # Create
+GET    /users/{id} # Get
+PUT    /users/{id} # Update
+DELETE /users/{id} # Delete
+\end{lstlisting}
+
+Here, the important thing is that \lstinline{PUT} is used to create a specific resource (a user), whose identifier has been chosen by the client. Then, the second \lstinline{PUT} updates the newly created resource. When one wants to create a resource without specifying its identifier, one must use \lstinline{POST}. \textbf{\lstinline{POST} is only dedicated to creating resources}, unlike \lstinline{PUT} that will mostly be used to update, but can also be used to create.
+
+\section{Understanding HTTP}
+
+At this point, I need to add some explanation about the HTTP protocol. Every HTTP transaction (request or response) is made of three main parts:
+
+\begin{itemize}
+  \item An initial line
+  \item Some headers
+  \item The body, separated from the headers by a blank line
+\end{itemize}
+
+For requests, the initial line is made of a verb, a URL and the HTTP version used. On the other hand, for responses, it is a bit different: the HTTP version, a response status code and an English reason phrase describing the status code. For instance:
+
+\code{An HTTP request}
+\begin{lstlisting}
+POST /users/123 HTTP/1.1
+Host: my-api.com
+Content-Type: application/x-www-form-urlencoded
+
+name=Jon&lastName=Snow
+\end{lstlisting}
+\code{An HTTP response}
+\begin{lstlisting}
+HTTP/1.1 200 OK
+Expires: Thu, 24 Sep 2015 19:36:25 GMT
+
+Hello world
+\end{lstlisting}
+That said, let's get back to APIs.
+
+\section{Transmitting data}
+
+How can a client update a user on the server? What if someone wants to update their biography for example? Or wants to mention their age? Likewise, how does the server respond and send data back to clients? Here come the status codes and the body.
+
+\medskip
+
+Basically, clients need to send one type of information in the body: data to be put into the remote database (or processed), via a \lstinline{PUT} or \lstinline{POST} request. It can be either to create a new resource or to update it (it depends on the HTTP verb used).
+
+\medskip
+
+On the other hand, the server can send different types of information:
+
+\begin{itemize}
+  \item Via the status code:
+  \begin{itemize}
+    \item How the request was handled
+  \end{itemize}
+  \item In headers:
+  \begin{itemize}
+    \item Metadata
+  \end{itemize}
+  \item In the body:
+  \begin{itemize}
+  \item A resource or a list of resources, in response to a GET request.
+  \item Some details about a resource newly created, in response to a PUT or POST request. For example, the resource's unique identifier or URL, to access this resource.
+  \end{itemize}
+\end{itemize}
+
+As you can see, the body is only dedicated to the requested resources(s). That is all. All other useful information must be transmitted via the HTTP status code or headers.
+
+\subsection{The status code}
+
+Here are the most used status codes for an APIs, thus those we decided to go with:
+
+\begin{table}[H]
+  \begin{center}
+    \noindent\begin{tabular}{ | r  l | l | }
+      \hline
+      Status code & Associated message & Used in response to\\
+      \hline
+      200 & OK                    & GET\\
+      201 & Created               & PUT (when creating a resource), POST\\
+      202 & Accepted              & PUT, POST\\
+      204 & No Content            & PUT, DELETE\\
+      301 & Moved Permanently     & GET, PUT, POST\\
+      400 & Bad request           & Any\\
+      401 & Unauthorized          & Any\\
+      403 & Forbidden             & Any\\
+      404 & Not Found             & GET, PUT (when updating), DELETE\\
+      500 & Internal Server Error & Any\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption[Main HTTP status codes used with APIs]{Main HTTP status codes used with APIs}
+\end{table}
+
+The HTTP protocol is very flexible, allowing us to use any non existing code if needed and relevant, when none of them fits our needs. That is why for the project \textsc{KopenVerkopen} (see chapter \ref{kvk}), we decided to add a few custom codes, within the range 550--599 (which are unused codes, according to the RFC\footnote{\textit{Request for Comments}, a document usually describing a protocol related to the Internet. For HTTP/1.1, see \href{https://tools.ietf.org/html/rfc2616}{tools.ietf.org/html/rfc2616}, even though it is been marked as obsolete (errata had been published since then).}).
+
+\subsection{The body}
+
+Sending parameters, from HTML forms, is pretty easy, it is a key-value thing, where parameters are separated by "\&", like this:
+
+\code{The body of an HTTP request}
+\begin{lstlisting}
+firstName=Jon&lastName=Snow
+\end{lstlisting}
+
+However, out of the context of HTML forms, how to format the body? Well, one could say we could use the same key-value format, but actually, it is not a good idea. Let's see what options we have.
+
+\subsubsection{A historic battle: XML vs. JSON or SOAP vs. REST}
+
+We had two main options: XML or JSON. Nowadays, a lot of people use JSON. I will not try to defend JSON here, there are loads of debates on the Internet\footnote{\href{http://www.json.org/xml.html}{www.json.org/xml.html}}. To briefly sum it up, JSON brings efficiency, lightness and high-readability in a single format. Additionally, it is extremely easy to parse with any language, thanks to a great integration and a lot of support. It is definitely the most popular format when dealing with APIs. We can easily create a single object or an array of objects. \textbf{Basically, this is how we decided to go with JSON for all the APIs we would have to design.}
+
+\subsection{A particular header}
+
+Earlier on, I explained that the second part of every HTTP request is the headers section. Let me introduce one of them, probably the most important one: \textbf{\lstinline{Content-Type}}.
+
+\medskip
+
+Its only purpose is to specify what kind of data we are sending. Consequently, in our case, this header should be like:
+
+\code{Real world example of an HTTP request containing \lstinline{Content-Type} header}
+\begin{lstlisting}
+POST /users HTTP/1.1
+Host: my-api.com
+Content-Type: application/json
+
+{
+    "name": "Jon Snow",
+    "bad_guys_killed": 200,
+    "skills":
+        [
+            {"name": "Warrior"},
+            {"name": "Member of the Night's Watch"}
+        ],
+    "is_a_badass": true
+}
+\end{lstlisting}
+
+Basically, its value is just a MIME type. To such a request, the response the server would send back:
+
+\code{Example of a response sent by the server}
+\begin{lstlisting}
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+    "id": 123
+}
+\end{lstlisting}
+
+We can see that the server created the resource (thanks to the status code). It also gives us its ID, JSON-formatted.
+
+\bigskip
+
+\begin{center}
+\noindent\rule{10cm}{0.4pt}
+\end{center}
+
+\bigskip
+
+At this point, the API is able to do the four basic operations we needed (Create Read Update Delete), on any kind of entity, easily, thanks to a pretty format, JSON. End-points are semantic and hierarchically ordered. Everything is perfect. But...
+
+\medskip
+
+We are not taking advantage of all the strengths of HTTP (headers for example). And what if we want to apply some filters to our GET requests? Sorting? What about pagination? Those are all the sorts of questions we had been wondering about. More importantly, what about security? Authentication?
+
+\section{Headers are metadata}
+
+A great thing to consider is that the body must only contain the requested resource(s). Any other piece of information must go to the headers. Furthermore, we can create any header we want.
+
+\subsection{Authentication}
+
+There are two major concepts under the name of authentication.
+
+\begin{itemize}
+  \item Sign up/Log in/Log out: \textbf{user management}
+  \item Authorization: \textbf{restricting the access to the API}
+\end{itemize}
+
+User management can be be achieved with cookies. This way, we can restrict some end-points to logged in users only.
+
+\medskip
+
+In parallel, we wanted to restrict our APIs to specific clients. One could say "Use basic authentication", but that did not really fit our need since it is not the original purpose of basic auth.
+
+\medskip
+
+Instead, what we came up with, is quite easy: creating as many HTTP headers as we wanted and sending (secret) keys on every request. For example, let's create a key to make sure we are accessing the right app, and another one to define the access level granted:
+
+\code{An HTTP request containing custom security headers}
+\begin{lstlisting}
+POST /users HTTP/1.1
+Host: my-api.com
+Content-Type: application/json
+Security-APP-ID: 123456
+Security-Access-Level: 3
+
+{
+    "name": "Jon Snow"
+}
+\end{lstlisting}
+
+Obviously, as I said in the beginning of this chapter, all of this would not make sense at all if we were not using HTTPS. We really do not want to expose such keys to anyone on the network.
+
+\subsection{Location}
+
+Another useful header is \lstinline{Location}. A good practice is to use it after creating a resource with \lstinline{POST}, to give back the location of the resource newly created. This way, no body is needed and our API can respond with a status code \lstinline{201 Created}, without a body. For example, after creating the user Jon Snow, we would get:
+
+\code{An HTTP response giving back the location of the new resource}
+\begin{lstlisting}
+HTTP/1.1 201 Created
+Location: https://my-api.com/users/123
+\end{lstlisting}
+The protocol and domain are optional, we could just send \lstinline{/users/123}.
+
+\subsection{Other useful piece of information}
+
+Basically, we can create as many custom headers as we want. A good practice with end-points returning a list of resources, is to give the total number of records in the database when relevant, via a header. We were doubtful about the relevance of such a practice, since we can programmatically count the number of results. But, as I will explain it in the next section, we are never going to return the full list of results in a single response.
+
+\section{Pagination}
+
+When returning a list of resources, above a certain number or results, it is a best practice to split responses in pages. It helps to reduce the waiting time and the weight of responses. Moreover, end-users might not need the whole list at once. Depending on the amount of details provided for each resource, a general rule would be returning between 100 and 1000 results per request as a maximum.
+
+\medskip
+
+Requesting a page is as simple as providing a query parameter:
+
+\code{Requesting a specific page}
+\begin{lstlisting}
+GET /users?page=3
+\end{lstlisting}
+
+On the server side, we would just skip the \textit{<number-of-results-per-page>*<number-of-page>} first users. Pages start at 0.
+
+\medskip
+
+For instance, if we return 100 users per request, with page 0 we would skip no one and simply returns the first 100 users (from 0 to 99). On page 1, we would skip the first 100 users from our database and return the users from 100 to 199, and so on. But there is a problem...
+
+\bigskip
+
+Let's say we have 10 users in our database. Every \lstinline{GET /users} returns 3 users at most, \textbf{sorted by age}. In SQL, this would be something like:
+
+\sql
+\begin{lstlisting}
+SELECT id, name, age FROM users ORDER BY AGE LIMIT 3 OFFSET x;
+/* where x equals 3*<number of page> */
+\end{lstlisting}
+\code{} % reset language used
+We would then have 3 pages and for each person, their id, name and age:
+
+\begin{table}[!h]
+  \begin{center}
+    \begin{tabular}{ | l  | l | l | }
+      \hline
+      Page 0 & Page 1 & Page 2\\
+      \hline
+      45, Jon, 20   & 55, Alice, 30 & 99, Pete, 37\\
+      87, Laura, 23 & 9, Bob, 33    & 1, Cindy, 39\\
+      3, Jean, 25   & 2, Helen, 36  & 78, Max, 40\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption[Example of 3 pages of result after API calls]{The 3 pages of results}
+\end{table}
+
+\noindent Here is a scenario:
+
+\begin{enumerate}
+  \item \lstinline{GET /users?page=0}: fine, we get results from Jon (id 45) to Jean (id 3).
+  \item A new user (Mary) signs up on our website/mobile application, aged of 24.
+  \item \lstinline{GET /users?page=1}: we get results from Jean to Bob. We got the same person twice (Jean), this is a problem.
+\end{enumerate}
+
+\noindent \textbf{What happened?}
+
+\bigskip
+
+As Mary is 24 and the API returns results sorted by age, Mary would be returned on page 0, which shifts Jean to page 1.
+
+\medskip
+
+A good way to solve this problem is to create a pagination based on an entity (here, a user). Instead of requesting a particular page, we would say to the API "give me results after this user" or "before this user". Let me explain it by replaying the scenario:
+
+\begin{enumerate}
+  \item \lstinline{GET /users}: no pagination specified, fine, we get results from Jon (id 45) to Jean (id 3)
+  \item A new user (Mary) signs up on our website/mobile application, aged of 24.
+  \item \lstinline{GET /users?pageAfter=3}: since the last person of our previous results had an id of 3, we request the users after that id. This way, we make sure we will not get duplicated results.
+\end{enumerate}
+
+For the project \textsc{KopenVerkopen} (see  chapter \ref{kvk}), while designing the global architecture of the project, we faced that problem. This is how we solved it.
+
+\medskip
+
+Two last pieces of advice we also had to consider:
+
+\begin{itemize}
+  \item Always enable pagination, even if the entire collection is small and will never grow. Like this, APIs' users will not get lost. The API remains consistent.
+  \item If a page returns this entire collection, one should always use the status code 200. Otherwise, 206 ("\textit{Partial Content}")
+\end{itemize}
+
+\section{Filtering and sorting}
+
+Every end-point that returns a list of resource should allow filtering on fields, as well as sorting. The following request should be possible:
+
+\code{Filtering and sorting on an HTTP request}
+\begin{lstlisting}
+GET /users?country=US&age=21&sortBy=name
+\end{lstlisting}
+We request all the users from the US, aged of 21, sorted by name. The inner mechanism is up to the developers.
+
+\section{Conclusion}
+
+Building an efficient API involves many aspects to consider, and most of all, requires a good knowledge of HTTP. It is time-consuming at first sight, but once you know what you are doing, what your needs are in terms of features, it is pretty straightforward. Considering all aspects right at the beginning, like security or the database architecture and how you would like to expose it, is key. That is what is called designing an architecture, and one should pay heed to it. When properly and carefully done, the API implementation job is fairly easy.
+
+\medskip
+
+This whole process of gathering information was worthy. We had to go through many talks (videos), tutorials or RFCs to eventually get a good understanding of what a "REST API" really meant.

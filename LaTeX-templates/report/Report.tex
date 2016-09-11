@@ -1,0 +1,118 @@
+\documentclass[11pt,a4paper,twoside,english,svgnames]{report}
+\usepackage[utf8]{inputenc} % force the use of utf8
+\usepackage[T1]{fontenc} % font encoding, allows accents (T1 font encoding is an 8-bit encoding)
+\usepackage[autostyle, english = american]{csquotes} % auto replacement of quotes
+\MakeOuterQuote{"}
+\usepackage[top=3.2cm,bottom=3.2cm,outer=2.7cm,inner=3.7cm]{geometry} % http://tex.stackexchange.com/questions/62311/a4paper-where-should-i-declare-it-in-document-class-or-geometry // another option: papersize={21cm,29.7cm}
+\usepackage[english]{babel} % translate everything in the desired language: table of contents, etc. 'english' can be replaced with 'francais'
+\usepackage[toc,page,header]{appendix} % cool appendices
+\usepackage{graphicx} % images management
+\usepackage{wrapfig} % floating images
+\usepackage[format=plain,labelfont=bf,font=small,justification=centering,margin=10pt]{caption} % allow multiline captions in figures,
+\usepackage{float} % allow \begin{figure}[H] and \begin{table}[H] (to really force positionning, unlike h!)
+\usepackage{array} % allow arrays
+\usepackage[super]{nth} % allow to write \nth(1) to write 1st, etc
+\usepackage{fancyhdr} % headers/footers management (overrides empty, plain and headings)
+\usepackage{upquote} % without this, lslisting replace vertical singles quotes with curved ones
+\usepackage{listings} % code insertion (MUST BE WRITTEN AFTER BABEL)
+\usepackage[
+            backend=biber,
+            style=numeric,
+            sorting=none, % nty = name title year
+            url=true, % always show url when provided
+            ]{biblatex}
+\addbibresource{bibliography.bib} % can be written only here in the preambule
+\usepackage[nottoc,notlot,notlof]{tocbibind} % add the bibliography to the ToC ; nottoc,notlot,notlof remove the ToC, List of Tables and List of Figures from the ToC
+%\usepackage{pdfpages} % include PDF documents
+\usepackage{enumitem} % for /setlist
+\usepackage{color,soul} % add some colors and hightlight
+\usepackage{xcolor} % more colors
+\usepackage{afterpage} % allow to execute command after the current page ends
+\usepackage[hidelinks,
+            colorlinks  = false, % no borders, colors enabled
+            anchorcolor = blue,
+            linkcolor   = black, % links in table of contents
+            urlcolor    = blue,
+            citecolor   = blue,
+            breaklinks  = true]{hyperref}
+\newcommand{\MYhref}[3][blue]{\href{#2}{\color{#1}{#3}}}%
+\usepackage[%nonumberlist, % if enabled, suppress the index (entry locations)
+            toc,% displayed in toc
+            numberedsection,% displayed as a numbered section in toc
+            xindy]{glossaries} % glossary without page numbers (references), with a number in the toc, with xindy style. MUST BE WRITTEN AFTER HYPERREF
+\renewcommand{\glsglossarymark}[1]{} % Prevent 'glossaries' from changing the header (took here: http://mirror.ox.ac.uk/sites/ctan.org/macros/latex/contrib/glossaries/glossaries-user.pdf)
+
+% List settings
+\setlist{itemsep=.5em}
+\setlist[itemize,2]{label={$\bullet$}} % use bullets for nested itemize in level 2
+
+% Glossary settings
+\setglossarystyle{listgroup}
+\loadglsentries{glossary.tex}
+\makeglossaries
+
+\input{config/listoftablesfigures}
+\input{config/listings}
+\input{config/chapters}
+\input{config/fancyhdr} % To be edited to change the header and footer
+
+\title{Internship report}
+\author{Romain PELLERIN}
+\date\today
+\setcounter{tocdepth}{2} % ToC depth
+
+
+\begin{document}
+\pagenumbering{gobble} % no numeration, will start after the ToC
+\nocite{*} % include everything that has not been mentionned, into the bibliography (PUT here to preserve the order of appearance), cause there are other commands \cite later
+
+\input{templates/frontcover}
+\input{templates/newpage}
+\input{acknowledgments}
+\thispagestyle{empty} % applyed to acknowledgments
+\input{templates/newpage}
+
+\tableofcontents
+
+%%%%%%%%% FIGURES AND TABLES ON THE SAME PAGE %%%%%%%%%
+\chapter*{Figures and Tables\markboth{\MakeUppercase{Figures and Tables}}{\MakeUppercase{Figures and Tables}}}
+\listoffigures
+\listoftables
+\input{templates/newpage}
+
+\cleardoublepage
+\pagenumbering{arabic} % re-enable numering
+
+\input{technical-summary}
+\input{presentation}
+\input{workflow}
+\input{api}
+\input{bearleaders}
+\input{kvk}
+\input{tesco}
+\input{conclusion}
+
+
+%%%%%%%%% GLOSSARY AND INDEX ON THE SAME PAGE %%%%%%%%%
+%\glsaddall % next line will print all entries, not just the ones your mark in your text
+%\printglossary[title=Glossary and Index]
+
+
+%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%
+\chapter*{Bibliography}
+\markboth{}{\MakeUppercase{Bibliography}}
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography[heading=subbibintoc,type=unpublished,title={Talks}]
+\printbibliography[heading=subbibintoc,type=online,title={Blog posts and documentation}] % heading=subbibintoc show the bibliography in the ToC as a section (heading=bibintoc for as chapter)
+\printbibliography[heading=subbibintoc,type=book,title={Books}]
+
+
+\cleardoublepage
+
+%%%%%%%%% APPENDICES %%%%%%%%%
+\begin{appendices}
+\input{appendices}
+\end{appendices}
+
+
+\end{document}

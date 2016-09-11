@@ -1,0 +1,104 @@
+% REQUIRE
+% \usepackage{color}
+% \usepackage{listings} % (MUST BE WRITTEN AFTER BABEL)
+
+% General colors
+\definecolor{comment}{rgb}{0.12, 0.38, 0.18 } % adjusted, in Eclipse: {0.25, 0.42, 0.30 } = #3F6A4D
+\definecolor{keyword}{rgb}{0.2, 0.2, 0.8} 
+\definecolor{string}{rgb}{0.06, 0.10, 0.98} % #101AF9
+
+% Language-specific colors
+% JavaScript
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+%\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+% % hack to force UTF-8 compatibility (for french only)
+% \lstset{
+%         extendedchars=true,
+%         literate={à}{{\`a}}1 {â}{{\^a}}1 %                         lettre a
+%                  {À}{{\`A}}1 {Â}{{\^A}}1 %                         lettre A
+%                  {ç}{{\c{c}}}1 %                                   lettre c
+%                  {Ç}{{\c{C}}}1 %                                   lettre C
+%                  {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1 % lettre e
+%                  {É}{{\'E}}1 {È}{{\`E}}1 {Ê}{{\^E}}1 {Ë}{{\"E}}1 % lettre E
+%                  {î}{{\^i}}1 {ï}{{\"i}}1 %                         lettre i
+%                  {Î}{{\^I}}1 {Ï}{{\"I}}1 %                         lettre I
+%                  {ô}{{\^o}}1 %                                     lettre o
+%                  {Ô}{{\^O}}1 %                                     lettre O
+%                  {œ}{{\oe}}1 %                                     lettre oe
+%                  {Œ}{{\OE}}1 %                                     lettre OE
+%                  {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1 %             lettre u
+%                  {Ù}{{\`U}}1 {Û}{{\^U}}1 {Ü}{{\"U}}1 %             lettre U
+% }
+
+% General rules
+\lstset{
+  rulecolor=\color{black!50},
+  backgroundcolor = \color{blue!10},
+  numbers=none, %left % display line numbers
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=false,
+  commentstyle=\color{comment},
+  keywordstyle=\color{keyword},
+  stringstyle=\color{string},
+  basicstyle=\ttfamily,
+  extendedchars=true,
+  emph=[2]{In},
+  emphstyle=[2]\color{black!70},
+  morecomment=[l][\color{blue}]{Out},
+  frame=single,
+  frameround=tttt,
+  framerule=0.3pt,
+  framesep=4pt,
+  belowcaptionskip=2.1pt
+}
+
+% % Define "Javascript" because lstlistings doesn't know it
+% Taken from https://gist.github.com/Geruhn/3d21f60a869457373d84
+\lstdefinelanguage{javascript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  %keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  %commentstyle=\color{purple}\ttfamily,
+  %stringstyle=\color{red}\ttfamily,
+  sensitive=true
+}
+
+% Usage: \javascript
+\newcommand{\javascript}{\lstset{
+  language=javascript,
+  title={{\setlength{\fboxsep}{1pt}\fcolorbox{orange}{yellow!20}{\sffamily\scriptsize
+              \textcolor{gray!10}{\_}JavaScript\textcolor{gray!10}{\_}}}}
+  }
+}
+
+% Usage: \code{My title}
+\newcommand{\code}[1]{\lstset{
+  language=,
+  title={{\setlength{\fboxsep}{1pt}\fcolorbox{orange}{yellow!20}{\sffamily\scriptsize
+              \textcolor{gray!10}{\_}{#1}\textcolor{gray!10}{\_}}}}
+  }
+}
+
+% Usage: \sql
+\newcommand{\sql}{\lstset{
+  language=SQL,
+  title={{\setlength{\fboxsep}{1pt}\fcolorbox{orange}{yellow!20}{\sffamily\scriptsize
+              \textcolor{gray!10}{\_}SQL\textcolor{gray!10}{\_}}}}
+  }
+}
+
+% Usage: \fakeshell
+\newcommand{\fakeshell}{\lstset{
+  language=bash
+  }
+}

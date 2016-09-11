@@ -1,0 +1,27 @@
+% REQUIRES
+% Nothing
+
+% Redefine chapter titles: only display the title and remove useless blank space
+% Original "/usr/share/texlive/texmf-dist/tex/latex/base/report.cls" edited
+\makeatletter
+  \def\@makechapterhead#1{% chapter{}
+  \vspace*{0\p@}% 50 before
+  {\parindent \z@ \raggedright \normalfont
+    %\ifnum \c@secnumdepth >\m@ne
+    %    \huge\bfseries \@chapapp\space \thechapter
+    %    \par\nobreak
+    %    \vskip 20\p@
+    %\fi
+    \interlinepenalty\@M
+    \Huge \bfseries \thechapter\quad #1   
+    \vskip 40\p@
+  }}
+  \def\@makeschapterhead#1{% chapter*{}
+  \vspace*{0\p@}% 50 before
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \Huge \bfseries  #1\par\nobreak
+    \vskip 40\p@
+  }}
+\makeatother

@@ -1,0 +1,33 @@
+% REQUIRES
+% Nothing
+
+% Transform \listoffigures and \listoftables into \section* instead of \chapter*
+% Original "/usr/share/texlive/texmf-dist/tex/latex/base/report.cls" edited
+\makeatletter
+  \renewcommand\listoffigures{%
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse
+      \fi
+      \section*{\listfigurename}% edited
+        % \@mkboth{\MakeUppercase\listfigurename}%
+        %         {\MakeUppercase\listfigurename}%
+      \@starttoc{lof}%
+      \if@restonecol\twocolumn\fi
+      }
+  % \newcommand*\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+  \renewcommand\listoftables{%
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse
+      \fi
+      \section*{\listtablename}% edited
+        % \@mkboth{%
+        %     \MakeUppercase\listtablename}%
+        %    {\MakeUppercase\listtablename}%
+      \@starttoc{lot}%
+      \if@restonecol\twocolumn\fi
+      }
+\makeatother

@@ -1,0 +1,44 @@
+\chapter*{Foreword}
+\markboth{}{\MakeUppercase{Foreword}}
+\addcontentsline{toc}{chapter}{Foreword}
+
+In 2016, mobile applications are key in most commercial businesses. Everyone used to have a website in the early 2000's, now everyone needs to have a mobile application. As from 2007, the introduction of the iPhone by Apple, this industry has never stopped growing, unceasingly, following a steep curve.
+
+\medskip
+
+Nowadays, the market shares are pretty simple: Android (acquired in 2005 and now developed by Google) and iOS (created and developed by Apple, initially released in 2007) rule the world. Windows Phone (Microsoft) ranks third and Blackberry (formerly known as Research in Motion) is almost dead. Consequently, anyone who wants to be "mobile" has to be present on, at least, both Android and iOS app markets.
+
+\medskip
+
+Android's main programming language for developing apps is Java, whereas iOS uses Objective-C and Swift. Development for Android and iOS implies knowing both platforms, both SDKs, at least two languages, and quite often, it requires twice as much time as it would take for one operating system. As a result, some people had the idea to create "cross-platform" mobile SDKs. Most of these use web technologies such as HTML5 or JavaScript. Basically, "cross-platform", in this context, means enabling developers to build web apps, in addition to mobile applications, at the same time, from the same codebase. Among the most popular are \href{http://phonegap.com/}{PhoneGap} and \textbf{\href{http://www.appcelerator.com/}{Appcelerator Titanium}}.
+
+\medskip
+
+Back in June 2015, when I was offered an intern position at the Smiths, I saw that as a new challenge for me. I was quite unfamiliar to JavaScript, and even more with cross-platform development using JavaScript. As I had heard a lot of good things about that language and its increasing ubiquity, without any doubt, I signed.
+
+\bigskip
+
+\begin{itshape}
+Furthermore, I would like to mention that, in the meantime, this internship offered me an opportunity to dive deeper into broad subjects about Computer Science. As a consequence, it allowed me to write about such topics on a personal blog, accessible at \href{http://blog.romainpellerin.eu/}{blog.romainpellerin.eu}. Some parts of these blog posts were reused in this internship report.
+\end{itshape}
+
+\section*{Technical summary}
+\addcontentsline{toc}{section}{Technical summary}
+
+Between PhoneGap and Titanium, The Smiths (my internship company) has decided to go with the latter. Why? Unlike PhoneGap, Titanium enables us to create "native applications". Fundamentally, every app developed with Titanium is made of two main components: the Titanium API, built in native code (Java or Objective-C) by Appcelerator, and JavaScript code (written by developers, like us), dynamically injected and evaluated at runtime by Titanium. Under the hoods, Titanium acts as a "bridge", a "proxy" between JavaScript and the platform. On the other hand, PhoneGap creates applications that run within the platform web browser. Applications developed with PhoneGap lack performance and are browser-limited. On the contrary, Titanium apps can access all the native functions and services offered by the system, as long as the company behind (here Appcelerator) keeps it up-to-date and integrates changes brought by newer versions. Regarding Titanium, they try to release new versions of Titanium frequently. And nearly every month, we get minor patches.
+
+\medskip
+
+During this first two months, I was assigned an entire new project: \textbf{Bearleaders}. My mission was to, first, write the specifications, working closely to our designer. Then, I had to develop a back-end (an API) (hosted on \href{http://www.parse.com}{Parse.com}), documenting it, with a back-office for the administrator -- our client. Finally, I was supposed to develop the Android and iOS applications using Titanium. Unfortunately, the project was abruptly canceled right before starting developing the apps, due to a poor relationship with our client. Since then, I had been working on an internal project, \textbf{KopenVerkopen}, which is the Dutch equivalent to \href{http://www.leboncoin.fr/}{leboncoin.fr}. I also helped on another project for a client from December to January.
+
+\medskip
+
+Another aspect of my mission involved carrying out research, especially about \textbf{APIs} and \textbf{Continuous Integration}. I have conducted a lot of searches about the former. As to the latter, with Matthias' help, we had been trying to set up an entire workflow, in order to add as much automation as possible. First, we "standardized" our Git workflow, then wrote many scripts and eventually came up with a well working solution. We also established a few rules to be followed by everyone in the company.
+
+\medskip
+
+Last but not least, during the first three months, I had been trying to get used to \textbf{functional programming} principles. I learnt a lot by using some libraries bringing functional programming into JavaScript, once again thanks to Matthias' involvement. The idea was to write code reusable in any context.
+
+\bigskip
+
+On many aspects, this internship was rich and full of lessons. It was the perfect chance to put my knowledge into practice and learn even further.

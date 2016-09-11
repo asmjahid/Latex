@@ -1,0 +1,125 @@
+\documentclass[english,c,10pt]{beamer} % c = text vertically centered, handout = delete the navbar
+\usepackage[english]{babel} % or francais
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{color,soul} % add some colors and hightlight
+\usepackage{xcolor}
+\usepackage{graphicx} % images
+\usepackage{subfig} % images side by side
+\usepackage{media9} % videos
+\usepackage{listings} % inserting code. MUST BE WRITTEN AFTER BABEL
+\usepackage{ulem} % strikethrough text
+\usepackage{transparent} % to make things transparent
+\usepackage{array} % insert arrays
+
+\usetheme{Warsaw}
+
+\definecolor{my_red}{RGB}{217,93,95}
+\definecolor{red_soft}{RGB}{197,73,75}
+
+\setbeamercolor{structure}{fg=my_red,bg=gray}
+\setbeamercolor{palette quaternary}{fg=white,bg=red_soft}
+%\setbeamertemplate{headline}{} % remove the headline
+\setbeamertemplate{frametitle}{} % remove the frame title bar
+\logo{\includegraphics[height=7mm]{logo1.jpg}}
+
+\renewcommand<>{\sout}[1]{ % http://tex.stackexchange.com/a/146531
+  \alt#2{\beameroriginal{\sout}{#1}}{#1}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LISTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{comment}{rgb}{0.12, 0.38, 0.18 } % adjusted, in Eclipse: {0.25, 0.42, 0.30 } = #3F6A4D
+\definecolor{keyword}{rgb}{0.37, 0.08, 0.25}  % #5F1441
+\definecolor{string}{rgb}{0.06, 0.10, 0.98} % #101AF9
+
+\lstset{
+  columns=flexible, %prevent extra spaces
+  rulecolor=\color{black!50},
+  backgroundcolor = \color{blue!10},
+  numbers=none, %left
+  showspaces=false,
+  showtabs=false,
+  tabsize=2,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=false,
+  commentstyle=\color{comment},
+  keywordstyle=\color{keyword},
+  stringstyle=\color{string},
+  basicstyle=\ttfamily,
+  extendedchars=true,
+  emph=[2]{In},
+  emphstyle=[2]\color{black!70},
+  morecomment=[l][\color{blue}]{Out},
+  frame=single,
+  frameround=tttt,
+  framerule=0.3pt,
+  framesep=4pt,
+  belowcaptionskip=2.1pt,
+  literate={à}{{\`a}}1 {â}{{\^a}}1 %                         letter a
+           {À}{{\`A}}1 {Â}{{\^A}}1 %                         letter A
+           {ç}{{\c{c}}}1 %                                   letter c
+           {Ç}{{\c{C}}}1 %                                   letter C
+           {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1 % letter e
+           {É}{{\'E}}1 {È}{{\`E}}1 {Ê}{{\^E}}1 {Ë}{{\"E}}1 % letter E
+           {î}{{\^i}}1 {ï}{{\"i}}1 %                         letter i
+           {Î}{{\^I}}1 {Ï}{{\"I}}1 %                         letter I
+           {ô}{{\^o}}1 %                                     letter o
+           {Ô}{{\^O}}1 %                                     letter O
+           {œ}{{\oe}}1 %                                     letter oe
+           {Œ}{{\OE}}1 %                                     letter OE
+           {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1 %             letter u
+           {Ù}{{\`U}}1 {Û}{{\^U}}1 {Ü}{{\"U}}1 %             letter U
+  % above is a hack to force UTF8 compatibility (only for french)
+}
+
+\newcommand{\java}{\lstset{
+  language=java,
+  title={{\setlength{\fboxsep}{1pt}\fcolorbox{orange}{yellow!20}{\sffamily\scriptsize
+              \textcolor{gray!10}{\_}Java\textcolor{gray!10}{\_}}}}
+  }
+}
+
+\newcommand{\texte}[1]{\lstset{
+  language=,
+  title={{\setlength{\fboxsep}{1pt}\fcolorbox{orange}{yellow!20}{\sffamily\scriptsize
+              \textcolor{gray!10}{\_}{#1}\textcolor{gray!10}{\_}}}}
+  }
+}
+
+\newcommand{\scala}{\lstset{
+  language=scala,
+  title={{\setlength{\fboxsep}{1pt}\fcolorbox{orange}{yellow!20}{\sffamily\scriptsize
+              \textcolor{gray!10}{\_}Scala\textcolor{gray!10}{\_}}}}
+  }
+}
+
+%\AtBeginSection[]
+%{
+%  \begin{frame}
+%  \frametitle{Table of contents}
+%  \tableofcontents[currentsection, hideothersubsections, pausesections, pausesubsections]
+%  \end{frame} 
+%}
+
+\title[Internship - Company]{Internship\\\textbf{Company}}
+\author[Fname \textsc{Lname}]{\textbf{Fname \textsc{Lname}}\\~\\\small Teacher: Fname \textsc{Lname}\\\small Master: Fname \textsc{Lname}} % author
+\institute{My school}
+\date{\today}
+
+\begin{document}
+
+  \frame[plain]{\titlepage}
+
+  %\section{Table of contents}
+  \begin{frame}[plain]{Table of contents}
+    \tableofcontents[pausesections,pausesubsections]
+  \end{frame}
+
+  \input{1-content}
+  \input{2-conclusion}
+  %\input{3-demo}
+
+\end{document}

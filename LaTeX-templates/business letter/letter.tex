@@ -1,0 +1,40 @@
+\documentclass[11pt,a4paper]{letter}
+\usepackage[utf8]{inputenc}
+%\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry} % not really taken in consideration by LaTeX in this environment
+\usepackage[english]{babel}
+% \makeatletter
+% \renewcommand*{\opening}[1]{\ifx\@empty\fromaddress
+%   \thispagestyle{firstpage}%
+%     {\raggedleft\@date\par}%
+%   \else  % home address
+%     \thispagestyle{empty}%
+%     {\begin{tabular}{@{}l@{}}\ignorespaces
+%       \fromaddress 
+%       \end{tabular}
+%       \par\nopagebreak
+%       \vspace{2\parskip}%
+%       \raggedleft\begin{tabular}{l@{}}\ignorespaces
+%       \@date 
+%       \end{tabular}\par}%
+%   \fi
+%   \vspace{2\parskip}%
+%   {\raggedright \toname \\ \toaddress \par}%
+%   \vspace{2\parskip}%
+%   #1\par\nobreak}
+% \makeatother
+\signature{Joe Doe}
+\address{21 Street \\ Smallville \\ Somewhere}
+\begin{document}
+
+\begin{letter}{Director \\ Doe \& Co \\ 35 Street
+\\ City \\ Postal code}
+\opening{Dear Sir or Madam:}
+
+Text
+
+I look forward to your reply.
+
+\closing{Yours Faithfully,}
+
+\end{letter}
+\end{document}

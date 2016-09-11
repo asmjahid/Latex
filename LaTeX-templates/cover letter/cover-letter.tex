@@ -1,0 +1,108 @@
+\documentclass[11pt,a4paper]{moderncv}
+\moderncvtheme[blue]{classic}
+\usepackage[utf8]{inputenc}
+\usepackage[top=1.5cm, bottom=1.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[english]{babel}
+\usepackage{ragged2e} % alignment
+
+\firstname{Romain}
+\familyname{Pellerin}
+\address{9 rue des réservoirs}{60200 Compiègne}{France}
+\email{contact@romainpellerin.eu}
+\homepage{romainpellerin.eu}
+\mobile{+33-7 85 25 71 64}
+%\extrainfo{}
+
+% http://tex.stackexchange.com/questions/148406/renew-command-makelettertitle-in-moderncv
+\makeatletter
+\newcommand*{\subject}[1]{\def\@subject{#1}}                    %% new command added
+
+\renewcommand*{\recomputeletterlengths}{%
+  \recomputecvlengths%
+  \setlength{\parskip}{6\p@}}
+
+\renewcommand*{\makelettertitle}{%
+  % recompute lengths (in case we are switching from letter to resume, or vice versa)
+  \recomputeletterlengths%
+  % sender contact info
+  \hfill%
+  \begin{minipage}{.5\textwidth}%
+    \raggedleft%
+    \addressfont\textcolor{color2}{%
+      {\bfseries\upshape\@firstname~\@lastname}\@firstdetailselementfalse%
+      \ifthenelse{\isundefined{\@addressstreet}}{}{\makenewline\addresssymbol\@addressstreet%
+        \ifthenelse{\equal{\@addresscity}{}}{}{\makenewline\@addresscity}% if \addresstreet is defined, \addresscity and addresscountry will always be defined but could be empty
+        \ifthenelse{\equal{\@addresscountry}{}}{}{\makenewline\@addresscountry}}%
+      \collectionloop{phones}{% the key holds the phone type (=symbol command prefix), the item holds the number
+        \makenewline\csname\collectionloopkey phonesymbol\endcsname\collectionloopitem}%
+      \ifthenelse{\isundefined{\@email}}{}{\makenewline\emailsymbol\emaillink{\@email}}%
+      \ifthenelse{\isundefined{\@homepage}}{}{\makenewline\homepagesymbol\httplink{\@homepage}}%
+      \ifthenelse{\isundefined{\@extrainfo}}{}{\makenewline\@extrainfo}}%
+    \end{minipage}\\[1em]
+  % recipient block
+  \begin{minipage}[t]{.5\textwidth}
+    \raggedright%
+    \addressfont%
+    {\bfseries\upshape\@recipientname}\\%
+    \@recipientaddress%
+  \end{minipage}
+  % date
+  \hfill% US style
+%  \\[1em]% UK style
+  \@date\\[2em]% US informal style: "January 1, 1900"; UK formal style: "01/01/1900"
+  % opening
+  \raggedright%
+  \ifthenelse{\isundefined{\@subject}}{}{%                              %% new command added
+    \textbf{Subject:} \@subject
+    \\[1.5em]}%
+  % opening
+  \raggedright% until here
+  \@opening\\[1.5em]%
+  % ensure no extra spacing after \makelettertitle due to a possible blank line
+%  \ignorespacesafterend% not working
+  \hspace{0pt}\par\vspace{-\baselineskip}\vspace{-\parskip}}
+\makeatother
+
+% from http://mirrors.ctan.org/macros/latex/contrib/moderncv/moderncvbodyv.sty
+\makeatletter
+\renewcommand*{\makeletterclosing}{
+  \@closing\\[3em]%
+  {\null\hfill\bfseries \@firstname~\@lastname\\[1em]
+  \null\hfill\includegraphics[width=1cm]{example-image-a}}% right-aligned
+  \ifthenelse{\isundefined{\@enclosure}}{}{%
+    \\%
+    \vfill%
+    {\color{color2}\itshape\enclname: \@enclosure}}}
+\makeatother
+
+\begin{document}
+\recipient{X Recruitment team}{X, Inc.\\123 somestreet\\some city}
+\date{\today}
+\subject{Application for ``Software Engineering Intern 2017''}
+\opening{Dear Sir or Madam,}
+\closing{Yours faithfully,}
+\enclosure[Attached]{resume} % use an optional argument to use a string other than "Enclosure", or redefine \enclname
+\makelettertitle\justifying
+
+I am writing to apply for the position ``Software Engineering Intern 2017'' recently found online on the X Careers website.
+
+\bigskip
+
+I am pursuing a Software Engineering Degree at Université de Technologie de Compiègne (in France). As you will notice on my attached resume, I have been developing many side-projects in the last few years, involving several programming languages. I love Open Source software; feel free to take a look at my projects on Github. I am a self-starter and I deeply love to discover new things, such as frameworks or programming languages. I have a strong knowledge of Java (I have developed a handful of Android applications), and I am fairly good at C++ programming (with Qt). I have also been developing websites with HTML, CSS, JavaScript and PHP for years. I honestly believe that I fully meet the minimum and preferred qualifications required for the position.
+
+\bigskip
+
+Why X? X has bought Y, Z and a lot of startups. X invests in DNA sequencing or in space exploration, fields that greatly interest me. X is building self-driving cars, in which I truly believe. I often tweet or write blog posts about these topics. There is no other company that could better suit what I am seeking. X has always been a fascinating company to me. In addition, artificial intelligence and machine learning, mentioned in the responsibilities, are fields I would definitely welcome working on.
+
+\bigskip
+
+I honestly think I would be a good fit for the position. I love the mindset you have spent years creating. Moreover, I would love to share my knowledge with engineers, brainstorm about innovative ideas, and more importantly learn from people -- just like what I have been doing with Human Talks, a student society I created last year. Disrupting what we nowadays take for granted and improving people's life are incredible incentives to me, which always push me to work harder.
+
+\bigskip
+
+I very much want to work for X and would be pleased to discuss my candidacy with you. Therefore I am available for a phone interview at any time. I am looking forward to hearing from you.
+
+\bigskip
+
+\makeletterclosing
+\end{document}

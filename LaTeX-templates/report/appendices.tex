@@ -1,0 +1,71 @@
+\chapter{Git: branching model}\label{appendix-git}
+
+\begin{figure}[!h]
+   \centering\includegraphics[width=0.92\textwidth]{images/git-branching-model.png}
+   \caption[]{Git workflow\\Courtesy of \href{https://twitter.com/nvie/status/644601079985008640}{Vincent Driessen\\Source: \href{http://nvie.com/posts/a-successful-git-branching-model/}{http://nvie.com/posts/a-successful-git-branching-model/}}} % [] allow us to hide that figure from the list of figures
+\end{figure}
+
+\chapter{Some of the SQL queries written for Bearleaders}\label{bearleaders-sql}
+
+\sql
+\begin{lstlisting}
+-- Only the last pictures for each user
+SELECT
+    filename,
+    first.user_id as user
+FROM
+    profile_photo as first
+INNER JOIN
+    (select user_id, max(id) as last from profile_photo group by user_id) as second
+ON
+    first.user_id = second.user_id
+    AND first.id = second.last;
+\end{lstlisting}
+\begin{lstlisting}
+-- Get the bearleaders (people who added more than 3 spots)
+SELECT
+    front_users.id,
+    pro.firstname as first_name,
+    pro.lastname as last_name,
+    front_users.username as username,
+    front_users.email as email,
+    password,
+    website,
+    concat(job,if((job is not null and job <> "") and (motto is not null and motto <> ""),\'\n\',\'\'),motto) as biography,
+    city as coming_from,
+    job,
+    "" as linkedin_url
+FROM
+    front_users, yellow_pages yp, profile pro
+WHERE
+    password IS NOT NULL AND password <> ""
+    AND front_users.id = yp.ypCreator and front_users.id = pro.user_id
+    AND email LIKE "%_@__%.__%"
+    AND EXISTS (select * from profile_photo where user_id = front_users.id)
+    AND firstname IS NOT NULL and firstname <> ""
+    AND lastname IS NOT NULL and (lastname <> "" or username = "Concierge")
+GROUP BY email
+HAVING count(*) > 3;
+\end{lstlisting}
+\begin{lstlisting}
+-- Gettings all the spots
+SELECT
+    yp_CatID, ypID, "true" as public, FU.email as creator, ypName as name, ypText as description, ypAddress as address, ypURL as website, ypPhone as phone_number, ypLat, ypLng, ypCountry as country, ypPlaats as city, ypMail as email
+FROM
+    yellow_pages
+INNER JOIN
+    BEARLEADERS as FU
+ON
+    ypCreator = FU.id
+WHERE
+    yp_CatID IS NOT NULL and yp_CatID <> ""
+    and ypLat IS NOT NULL
+    and ypLng IS NOT NULL
+    and ypLogo IS NOT NULL and ypLogo <> ""
+    and ref_id = 0
+    and ypCountry IS NOT NULL and ypCountry <> ""
+    and ypText IS NOT NULL and ypText <> ""
+    and ypName IS NOT NULL and ypName <> ""
+    and ypAddress IS NOT NULL and ypAddress <> ""
+    and ypPlaats IS NOT NULL and ypPlaats <> "";
+\end{lstlisting}
